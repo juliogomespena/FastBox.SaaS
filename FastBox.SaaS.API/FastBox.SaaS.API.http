@@ -1,0 +1,5 @@
+@FastBox.SaaS.API_HostAddress = http://localhost:5222
+
+GET {{FastBox.SaaS.API_HostAddress}}/api/test
+
+###
