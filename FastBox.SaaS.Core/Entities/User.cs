@@ -2,6 +2,6 @@
 
 namespace FastBox.SaaS.Core.Entities;
 
-public class User : IdentityUser
+public class User : IdentityUser<Guid>
 {
 }

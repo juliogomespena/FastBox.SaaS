@@ -1,4 +1,3 @@
-
 using FastBox.SaaS.Core.Entities;
 using FastBox.SaaS.Data.Context;
 using Microsoft.AspNetCore.Identity;
@@ -15,10 +14,10 @@ public class Program
 		/* Add services to the container */
 		//Configure DbContext
 		builder.Services.AddDbContext<ApplicationDbContext>(options =>
-			options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+			options.UseNpgsql(builder.Configuration.GetConnectionString("dev")));
 
 		//Configure Identity
-		builder.Services.AddIdentity<User,IdentityRole>()
+		builder.Services.AddIdentity<User,IdentityRole<Guid>>()
 			.AddEntityFrameworkStores<ApplicationDbContext>()
 			.AddDefaultTokenProviders();
 
