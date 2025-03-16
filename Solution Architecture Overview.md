@@ -1,23 +1,23 @@
 # Solution Architecture Overview - Multitenant Car Repair Shop Application
 
 ## Project Structure
-The solution will consist of these projects:
+The solution consists of these projects:
 
-1. **UI (Blazor WebAssembly)**
+1. **FastBox.SaaS.UI (Blazor WebAssembly)**
    - Client-side application with MudBlazor components
    - Contains pages, components, and services for API communication
    - User authentication and profile management interfaces
-   - Tenant-specific UI components and layouts
    - Tenant context management for UI state
+   - Tenant-specific UI components and layouts
 
-2. **API (ASP.NET Minimal APIs)**
+2. **FastBox.SaaS.API (ASP.NET Minimal APIs)**
    - REST API endpoints using Minimal API syntax
    - Request handling and business logic orchestration
    - ASP.NET Core Identity integration for authentication and authorization
    - Tenant resolution middleware
-   - Schema selection and routing based on tenant context
+   - Schema selection based on tenant context
 
-3. **Core**
+3. **FastBox.SaaS.Core**
    - Domain entities, interfaces, and DTOs
    - Business logic and validation rules
    - Application services and domain models
@@ -25,15 +25,15 @@ The solution will consist of these projects:
    - Tenant-specific and shared domain models
    - Tenant context abstractions and interfaces
 
-4. **Data**
+4. **FastBox.SaaS.Data**
    - Multitenancy-aware EF Core DbContext implementation with Identity integration
-   - Entity configurations and relationships
+   - Entity configurations using Fluent API
    - Repository implementations with tenant isolation
    - PostgreSQL-specific database concerns including schema management
    - Data migrations management for both main and tenant-specific schemas
    - Schema creation and tenant provisioning services
 
-5. **Infrastructure**
+5. **FastBox.SaaS.Infrastructure**
    - Cross-cutting concerns like logging, caching, messaging
    - External service integrations
    - Email services for account management workflows
@@ -50,8 +50,14 @@ UI → API → Core ← Data
 
 ## Multitenancy Implementation
 
-1. **Database Schema Architecture**
-   - Main schema (`public` or `app`) for shared functionality:
+1. **Single URL Approach**
+   - All tenants access the application through the same URL (e.g., `fastbox.com`)
+   - No subdomain-based tenant identification
+   - Session-based tenant context after login
+   - Tenant selection screen for users with access to multiple shops
+
+2. **Database Schema Architecture**
+   - Main schema (`public`) for shared functionality:
      - Tenant registration and management
      - Global user accounts and authentication
      - Cross-tenant reporting capabilities
@@ -62,19 +68,19 @@ UI → API → Core ← Data
      - Tenant-specific configurations and customizations
      - Tenant-specific reporting data
 
-2. **Tenant Resolution and Context**
-   - Tenant identification via subdomain, header, or claim
+3. **Tenant Resolution and Context**
+   - Tenant identification via session state
    - Tenant context propagation through request pipeline
    - Runtime schema selection based on resolved tenant
    - Tenant-specific connection management
 
-3. **Data Isolation Strategy**
+4. **Data Isolation Strategy**
    - Schema-based isolation using PostgreSQL schemas
    - EF Core query filters for additional tenant isolation
    - DbContext factory pattern for tenant-specific contexts
    - Filtered navigation properties for cross-schema relations
 
-4. **Tenant Provisioning**
+5. **Tenant Provisioning**
    - New tenant onboarding workflow
    - Automated schema creation and initialization
    - Tenant-specific seed data population

@@ -2,6 +2,7 @@
 
 namespace FastBox.SaaS.Core.Entities;
 
-public class User : IdentityUser<Guid>
+public sealed class User : IdentityUser<Guid>
 {
+	public ICollection<UserTenant> UserTenants { get; set; } = new List<UserTenant>();
 }
